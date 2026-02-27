@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Setup Guide - Email System</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        .step { background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #007bff; }
+        .warning { background: #fff3cd; padding: 15px; border-radius: 4px; border: 1px solid #ffeaa7; color: #856404; margin: 20px 0; }
+        .success { background: #d4edda; padding: 15px; border-radius: 4px; border: 1px solid #c3e6cb; color: #155724; margin: 20px 0; }
+        .code { background: #f1f3f4; padding: 10px; border-radius: 4px; font-family: monospace; margin: 10px 0; }
+        .highlight { background: yellow; padding: 2px 4px; }
+        img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; margin: 10px 0; }
+        .btn { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 10px 0; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>📧 Gmail Setup Guide for Email System</h1>
+    
+    <div class="warning">
+        <strong>⚠️ Important:</strong> You MUST use an App Password, not your regular Gmail password. Regular passwords will not work with SMTP.
+    </div>
+    
+    <div class="step">
+        <h2>Step 1: Enable 2-Factor Authentication</h2>
+        <ol>
+            <li>Go to your <a href="https://myaccount.google.com/security" target="_blank">Google Account Security page</a></li>
+            <li>Under "Signing in to Google", click on <strong>"2-Step Verification"</strong></li>
+            <li>Follow the setup process to enable 2FA (you'll need your phone)</li>
+            <li>Make sure 2-Step Verification shows as <span class="highlight">"On"</span></li>
+        </ol>
+    </div>
+    
+    <div class="step">
+        <h2>Step 2: Generate App Password</h2>
+        <ol>
+            <li>Go to <a href="https://myaccount.google.com/apppasswords" target="_blank">Google App Passwords</a></li>
+            <li>You might need to sign in again</li>
+            <li>In the "Select app" dropdown, choose <strong>"Mail"</strong></li>
+            <li>In the "Select device" dropdown, choose <strong>"Other (Custom name)"</strong></li>
+            <li>Type <strong>"Email System"</strong> as the custom name</li>
+            <li>Click <strong>"Generate"</strong></li>
+            <li>Copy the 16-digit password (format: <code>xxxx xxxx xxxx xxxx</code>)</li>
+        </ol>
+        
+        <div class="warning">
+            <strong>Important:</strong> Save this password immediately! Google will only show it once.
+        </div>
+    </div>
+    
+    <div class="step">
+        <h2>Step 3: Update Email Configuration</h2>
+        <p>Open <code>config/email_config.php</code> and update these lines:</p>
+        
+        <div class="code">
+define('EMAIL_PROVIDER', 'gmail');<br>
+define('GMAIL_USERNAME', '<span class="highlight">soumyaranjanpadhi936@gmail.com</span>'); // ← Your Gmail address<br>
+define('GMAIL_APP_PASSWORD', '<span class="highlight">tpvfzevkdebtuoyt</span>'); // ← Your 16-digit app password (no spaces!)
+        </div>
+        
+        <p><strong>Example:</strong></p>
+        <div class="code">
+define('EMAIL_PROVIDER', 'gmail');<br>
+define('GMAIL_USERNAME', 'john.doe@gmail.com');<br>
+define('GMAIL_APP_PASSWORD', 'abcdabcdabcdabcd'); // Remove spaces from the app password
+        </div>
+    </div>
+    
+    <div class="step">
+        <h2>Step 4: Test Your Configuration</h2>
+        <ol>
+            <li>Save the <code>email_config.php</code> file</li>
+            <li>Go back to the <a href="../send_email.php">Send Email page</a></li>
+            <li>The warning message should disappear</li>
+            <li>Send a test email to yourself</li>
+        </ol>
+    </div>
+    
+    <div class="success">
+        <h3>✅ Configuration Complete!</h3>
+        <p>Once you've completed these steps, you should be able to send emails successfully.</p>
+        <a href="../send_email.php" class="btn">Go to Send Email</a>
+    </div>
+    
+    <h2>🔧 Troubleshooting</h2>
+    
+    <div class="step">
+        <h3>Common Issues:</h3>
+        
+        <h4>❌ "SMTP Error: Could not authenticate"</h4>
+        <ul>
+            <li>Make sure you're using the App Password, not your regular Gmail password</li>
+            <li>Check that 2-Factor Authentication is enabled</li>
+            <li>Verify your Gmail address is correct</li>
+            <li>Make sure there are no spaces in the app password</li>
+        </ul>
+        
+        <h4>❌ "App Passwords" option not available</h4>
+        <ul>
+            <li>2-Factor Authentication must be enabled first</li>
+            <li>Some Google Workspace accounts may have restrictions</li>
+            <li>Try using a personal Gmail account instead</li>
+        </ul>
+        
+        <h4>❌ "Connection timed out"</h4>
+        <ul>
+            <li>Check your internet connection</li>
+            <li>Verify firewall isn't blocking port 587</li>
+            <li>Try using port 465 with SSL instead</li>
+        </ul>
+    </div>
+    
+    <div class="step">
+        <h3>Alternative Email Providers:</h3>
+        <p>If Gmail doesn't work, you can try:</p>
+        <ul>
+            <li><strong>Outlook/Hotmail:</strong> Change EMAIL_PROVIDER to 'outlook'</li>
+            <li><strong>Yahoo:</strong> Change EMAIL_PROVIDER to 'yahoo'</li>
+            <li><strong>Custom SMTP:</strong> Use your hosting provider's SMTP settings</li>
+        </ul>
+    </div>
+    
+    <div class="warning">
+        <h3>🔒 Security Tips:</h3>
+        <ul>
+            <li>Never share your app password with anyone</li>
+            <li>If you suspect it's compromised, revoke it and generate a new one</li>
+            <li>Use different app passwords for different applications</li>
+            <li>Keep your email configuration file secure</li>
+        </ul>
+    </div>
+    
+    <p><a href="../dashboard.php" class="btn">← Back to Dashboard</a></p>
+</body>
+</html>
